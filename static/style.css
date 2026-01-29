@@ -3,7 +3,7 @@
     padding: 0;
 }
 body{
-    background: linear-gradient(to right,black, #2B2D5E);
+    background: linear-gradient(to bottom right, #0b0d1a 0%, #2B2D5E 60%);
     color: white;
     min-height: 100vh;
 }
