@@ -7,3 +7,9 @@ body{
     color: white;
     min-height: 100vh;
 }
+.hero-section{
+    display: flex; 
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
