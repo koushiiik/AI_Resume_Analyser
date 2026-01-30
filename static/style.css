@@ -13,3 +13,8 @@ body{
     justify-content: center;
     align-items: center;
 }
+.container{
+    max-width: 500px;
+    padding: 50px;
+    border-radius: 20px;
+}
