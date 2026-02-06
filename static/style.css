@@ -16,7 +16,7 @@ body{
     align-items: center;
 }
 .container{
-    max-width: 500px;
+    max-width: 570px;
     padding: 50px;
     border-radius: 20px;
     background: rgba(43, 45, 94, 0.35);
@@ -28,4 +28,14 @@ body{
 .container:hover{
     transform: translateY(-6px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+h1{
+    font-size: 3.5rem;
+    line-height: 1.1;
+    font-weight: 700;
+}
+p{
+    font-weight:400;
+    opacity: 0.7;
+    line-height:1.6 ;
 }
