@@ -68,7 +68,15 @@ nav #logo{
     color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     opacity: 0.75;
-    transition: opacity 0.25s ease;
+    padding: 10px;
+    border-radius: 15px;
+    transition: background 0.25s ease,opacity 0.25s ease;
+}
+.nav-links li a:hover{
+    opacity: 1;
+    background:rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    color: rgba(255, 255, 255, 0.82);
 }
 nav{
     height: 65px;
@@ -83,6 +91,4 @@ nav{
     top: 0;
     z-index: 1000;
 }
-.nav-links li a:hover{
-    opacity: 1;
-}
+
