@@ -139,4 +139,27 @@ nav{
     background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 0 14px rgba(255, 255, 255, 0.12);
 }
+.spinner{
+    height: 24px;
+    width: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border-top: 3px solid rgba(255, 255, 255, 0.8);
+    margin-top: 15px;
+    display: none;
+    animation: spin 0.8s linear infinite;
+}
+.upload-box.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.upload-box.loading .spinner {
+    display: block;
+}
+
+.upload-box.loading .upload-title,
+.upload-box.loading .upload-subtitle {
+    opacity: 0.6;
+}
 

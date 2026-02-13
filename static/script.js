@@ -6,6 +6,8 @@ file_inp.addEventListener("change",function(){
     if(file_inp.files.length > 0){
         subtitle.textContent= file_inp.files[0].name + " selected";
         uploadBox.classList.add("active");
+        uploadBox.classList.add("loading");
+        file_inp.form.submit();
     }
 });
 uploadBox.addEventListener("dragover",function(e){
@@ -23,5 +25,7 @@ uploadBox.addEventListener("drop",function(e){
         file_inp.files=e.dataTransfer.files;
         subtitle.textContent=file_inp.files[0].name + " selected";
         uploadBox.classList.add("active");
+        uploadBox.classList.add("loading");
+        file_inp.form.submit();
     }
 });
