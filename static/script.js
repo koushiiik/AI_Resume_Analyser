@@ -173,7 +173,7 @@ if (uploadForm) {
 window.addEventListener("load", () => {
     const err = document.getElementById("errorMessage");
     if (err) {
-        setTimeout(() => { err.style.transition = "opacity 0.5s ease"; err.style.opacity = "0"; }, 3000);
-        setTimeout(() => { if (err) err.remove(); }, 3500);
+        setTimeout(() => { err.style.transition = "opacity 0.5s ease"; err.style.opacity = "0"; }, 5500);
+        setTimeout(() => { if (err) err.remove(); }, 5500);
     }
 });
