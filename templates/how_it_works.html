@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zCV | How It Works</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='result.css') }}">
+    <style>
+        .page-content {
+            padding: calc(var(--nav-h) + 60px) clamp(20px, 5vw, 60px) 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .page-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 30px;
+            color: var(--text);
+        }
+        .steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .step {
+            background: var(--surface);
+            border: 1px solid var(--border-mid);
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+        }
+        .step h3 {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .step p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <nav id="mainNav">
+        <span class="logo">z<span class="logo-cv">CV</span></span>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/how-it-works">How it works</a></li>
+            <li>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg id="iconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg id="iconMoon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+    <div class="nav-drawer" id="navDrawer">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="#" id="mobileThemeToggle">Switch to Light</a>
+    </div>
+
+    <main class="page-content">
+        <h1>How It Works</h1>
+        <div class="steps">
+            <div class="step">
+                <h3>1. Upload Your Resume</h3>
+                <p>Provide your resume in PDF or DOCX format safely and securely.</p>
+            </div>
+            <div class="step">
+                <h3>2. Select Your Target Role</h3>
+                <p>Choose the role you are applying for from our dropdown menu so we can match it against industry-standard requirements.</p>
+            </div>
+            <div class="step">
+                <h3>3. Discover Skill Gaps</h3>
+                <p>Our engine automatically calculates an ATS compatibility score and identifies the critical skills you might be missing.</p>
+            </div>
+            <div class="step">
+                <h3>4. Actionable AI Feedback</h3>
+                <p>Receive clear, punchy bullet points advising exactly on what to improve before you apply.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const toggle = document.getElementById("navToggle");
+        const drawer = document.getElementById("navDrawer");
+        if (toggle && drawer) {
+            toggle.addEventListener("click", () => drawer.classList.toggle("open"));
+            document.addEventListener("click", e => {
+                if (!toggle.contains(e.target) && !drawer.contains(e.target)) drawer.classList.remove("open");
+            });
+        }
+        function applyTheme(light) {
+            document.body.classList.toggle("light", light);
+            localStorage.setItem("zcv-theme", light ? "light" : "dark");
+            const sun  = document.getElementById("iconSun"), moon = document.getElementById("iconMoon"), mob = document.getElementById("mobileThemeToggle");
+            if (sun) sun.style.display = light ? "none" : "inline";
+            if (moon) moon.style.display = light ? "inline" : "none";
+            if (mob) mob.textContent = light ? "Switch to Dark" : "Switch to Light";
+        }
+        applyTheme(localStorage.getItem("zcv-theme") === "light");
+        const themeBtn = document.getElementById("themeToggle"), mobTheme = document.getElementById("mobileThemeToggle");
+        if (themeBtn) themeBtn.addEventListener("click", () => applyTheme(!document.body.classList.contains("light")));
+        if (mobTheme) mobTheme.addEventListener("click", e => { e.preventDefault(); applyTheme(!document.body.classList.contains("light")); });
+    </script>
+</body>
+</html>

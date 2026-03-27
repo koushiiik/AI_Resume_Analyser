@@ -1,82 +1,94 @@
 """
 ai_suggestions.py
 -----------------
-Uses the Groq API (free) to generate one-line resume improvement
-suggestions for each missing skill.
-
-Requires GROQ_API_KEY in your .env file.
-Get a free key at: console.groq.com
+Uses the Groq API to generate concise resume improvement suggestions.
 """
 
 import os
-import json
-import requests
+import logging
+from groq import Groq
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-
-
-def get_suggestions(missing_skills: list) -> list:
+def get_ai_suggestions(resume_text: str, missing_skills: list, role: str) -> list:
     """
-    For each missing skill, generate a short actionable resume tip.
-
-    Returns empty list if no skills are missing, key is not set,
-    or the API call fails for any reason.
+    Generate ATS-focused improvement suggestions using the Groq API.
+    
+    Args:
+        resume_text (str): Extracted text from the resume
+        missing_skills (list): List of skills missing from the resume
+        role (str): The target role
+    
+    Returns:
+        list: A list of actionable suggestion bullet points
     """
-
+    
+    # Handle the empty missing_skills edge case
     if not missing_skills:
-        return []
-
-    if not GROQ_API_KEY:
-        return []
-
-    skills_list = "\n".join(f"- {skill}" for skill in missing_skills)
-
-    prompt = f"""You are a resume improvement assistant. A candidate is missing the following skills for their target job role:
-
-{skills_list}
-
-For each missing skill, write exactly ONE short practical sentence (max 15 words) telling the candidate how to add this skill to their resume. Focus on concrete actions like adding a project, listing a tool, or mentioning coursework.
-
-Respond ONLY with a valid JSON array. No explanation, no markdown, no extra text.
-Format:
-[
-  {{"skill": "skill name", "suggestion": "your one-line tip here"}},
-  ...
-]"""
+        return {
+            "overall": "Great job! Your resume aligns highly with the target role.",
+            "bullets": [
+                "Ensure your impact is backed by measurable metrics (e.g., increased efficiency by X%).",
+                "Keep exploring advanced topics in your field to stay competitive."
+            ]
+        }
+        
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        return {
+            "overall": "Unable to generate AI suggestions.",
+            "bullets": ["The GROQ_API_KEY is not set."]
+        }
 
     try:
-        response = requests.post(
-            GROQ_API_URL,
-            headers={
-                "Authorization": f"Bearer {GROQ_API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "llama3-8b-8192",
-                "messages": [
-                    {"role": "user", "content": prompt}
-                ],
-                "temperature": 0.4,
-                "max_tokens": 1000
-            },
-            timeout=20
+        client = Groq(api_key=api_key)
+        
+        truncated_text = resume_text[:10000]
+        skills_str = ", ".join(missing_skills)
+        
+        system_prompt = (
+            "You are an expert resume reviewer and ATS optimization specialist. "
+            "Provide concise, high-impact improvement suggestions. Respond ONLY in valid JSON format."
         )
+        
+        user_prompt = f"""Target Role: {role}
+Missing Skills: {skills_str}
 
-        data = response.json()
+Resume Excerpt:
+{truncated_text}
 
-        # Extract text from Groq's response structure
-        raw_text = data["choices"][0]["message"]["content"].strip()
+Provide an overall assessment and exactly 3 short, highly practical bullet points.
+Format your output exactly matching this JSON block:
+{{
+  "overall": "One short 2-3 sentence paragraph giving an overall honest assessment and suggestion.",
+  "bullets": [
+    "Brief point 1 focusing on how to add a critical missing skill",
+    "Brief point 2 focusing on structure or impact metrics",
+    "Brief point 3 focusing on ATS optimization"
+  ]
+}}"""
 
-        # Remove markdown code fences if model wraps in ```json ... ```
-        if raw_text.startswith("```"):
-            raw_text = raw_text.split("```")[1]
-            if raw_text.startswith("json"):
-                raw_text = raw_text[4:]
-
-        suggestions = json.loads(raw_text.strip())
-        return suggestions
-
-    except Exception:
-        # If anything fails, return empty list gracefully
-        return []
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            response_format={"type": "json_object"},
+            temperature=0.6,
+            max_tokens=400,
+        )
+        
+        import json
+        raw_text = response.choices[0].message.content.strip()
+        data = json.loads(raw_text)
+        
+        return {
+            "overall": data.get("overall", ""),
+            "bullets": data.get("bullets", [])
+        }
+        
+    except Exception as e:
+        logging.error(f"Groq API Error: {e}")
+        return {
+            "overall": "We encountered an error while communicating with the AI server.",
+            "bullets": [f"Debug: {str(e)}", "Please try again later."]
+        }

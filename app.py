@@ -7,7 +7,7 @@ from utils.resume_parser import extract_text
 from utils.text_cleaner import clean_text
 from utils.skill_matcher import detect_skills
 from utils.section_detector import detect_sections
-from utils.ai_suggestions import get_suggestions
+from utils.ai_suggestions import get_ai_suggestions
 
 load_dotenv()
 
@@ -54,6 +54,13 @@ def file_too_large(e):
 def home():
     return render_template("index.html")
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/how-it-works")
+def how_it_works():
+    return render_template("how_it_works.html")
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
@@ -133,7 +140,7 @@ def upload_file():
         sections = detect_sections(text)
 
         # 10. Get AI suggestions for missing skills
-        suggestions = get_suggestions(result["missing_skills"])
+        suggestions = get_ai_suggestions(text, result["missing_skills"], selected_role)
 
     finally:
         # Always delete the uploaded file — runs even if an error occurred above
