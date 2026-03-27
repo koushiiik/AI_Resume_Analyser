@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import os
+import tempfile
 import requests
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
@@ -84,9 +85,8 @@ def upload_file():
     if not selected_role:
         return render_template("index.html", message="Please select a target role.")
 
-    # 4. Save file safely (secure_filename prevents path traversal attacks)
-    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    # 4. Save file safely (use OS temp dir for Vercel/Serverless compatibility)
+    UPLOAD_FOLDER = tempfile.gettempdir()
 
     safe_name = secure_filename(file.filename)
     file_path = os.path.join(UPLOAD_FOLDER, safe_name)
