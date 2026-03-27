@@ -5,7 +5,4 @@ python-dotenv
 google-generativeai
 werkzeug
 requests
-
-
-
-
+groq

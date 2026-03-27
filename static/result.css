@@ -575,7 +575,7 @@ nav {
 /*  AI Suggestions  */
 .suggestions-card {
     background: var(--surface);
-    border: 1px solid var(--amber-border);
+    border: 1px solid var(--border-mid);
     border-radius: var(--radius);
     padding: clamp(16px, 3vw, 24px);
 }
@@ -590,8 +590,8 @@ nav {
 .suggestions-icon {
     width: 28px; height: 28px;
     border-radius: 7px;
-    background: var(--amber-bg);
-    color: var(--amber);
+    background: var(--accent-glow);
+    color: var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -600,25 +600,41 @@ nav {
 
 .suggestions-header h3 {
     font-family: var(--font-display);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--text);
 }
 
-.suggestions-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.suggestions-overall {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.suggestions-list { 
+    list-style: none; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+}
 
 .suggestion-item {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding: 10px 14px;
-    background: var(--amber-bg);
-    border: 1px solid var(--amber-border);
-    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    background: var(--surface-hover);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px var(--radius-sm) var(--radius-sm) 4px;
+    transition: background var(--ease);
 }
 
-.suggestion-skill { font-size: 0.78rem; font-weight: 600; color: var(--amber); text-transform: capitalize; letter-spacing: 0.04em; }
-.suggestion-text  { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+.suggestion-item:hover {
+    background: var(--surface);
+}
+
+.suggestion-skill { font-size: 0.78rem; font-weight: 600; color: var(--accent); text-transform: capitalize; letter-spacing: 0.04em; }
+.suggestion-text  { font-size: 0.92rem; color: var(--text); line-height: 1.6; }
 
 /* Back Button  */
 .result-footer { display: flex; justify-content: center; padding-top: 4px; }

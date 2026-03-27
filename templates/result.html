@@ -17,7 +17,8 @@
         <span class="logo">z<span class="logo-cv">CV</span></span>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/how-it-works">How it works</a></li>
             <li>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <svg id="iconSun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -44,7 +45,8 @@
 
     <div class="nav-drawer" id="navDrawer">
         <a href="/">Home</a>
-        <a href="#">About</a>
+        <a href="/about">About</a>
+        <a href="/how-it-works">How it works</a>
         <a href="#" id="mobileThemeToggle">Switch to Light</a>
     </div>
 
@@ -163,13 +165,15 @@
                             <div class="suggestions-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                             </div>
-                            <h3>AI Improvement Suggestions</h3>
+                            <h3>AI Suggestions</h3>
                         </div>
+                        {% if suggestions.overall %}
+                        <p class="suggestions-overall">{{ suggestions.overall }}</p>
+                        {% endif %}
                         <ul class="suggestions-list">
-                            {% for item in suggestions %}
+                            {% for item in suggestions.bullets %}
                             <li class="suggestion-item">
-                                <span class="suggestion-skill">{{ item.skill }}</span>
-                                <span class="suggestion-text">{{ item.suggestion }}</span>
+                                <span class="suggestion-text">{{ item }}</span>
                             </li>
                             {% endfor %}
                         </ul>
